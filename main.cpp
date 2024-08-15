@@ -155,7 +155,7 @@ int main()
     Person Clients[NUMBER_OF_CLEINTS];
 
     Clients[0].Forename = "Mayer";
-    Clients[0].Forename = "Jane";
+    Clients[0].Surname = "Jane";
     Clients[0].HomeAddress = "123 Main St, Apt 4B, Springfield, IL 62704";
     Clients[0].BirthDate = "12/12/2002";
 

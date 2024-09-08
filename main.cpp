@@ -32,7 +32,7 @@ typedef enum
  ******************************************************************************/
 
 /*************** class Person  ***************/
-class Person 
+class Person //Customer aggregation
 {
     private:    
         std::string Forename;
@@ -42,7 +42,8 @@ class Person
     protected:        
     public:
 
-    std::ostream & operator<<(const Person &, const Person); // Cały czas coś robię źle. Mimo przyjaźni, nie mogę sięgać do pól private. Dlatego obecnie są one w sekcji public
+    //friend std::ostream & operator<<(const std::ostream &, const Person); // Cały czas coś robię źle. Mimo przyjaźni, nie mogę sięgać do pól private. Dlatego obecnie są one w sekcji public
+    friend std::ostream & operator<<(std::ostream & Os, const Person & Prs);
 };
 
 /*************** class Account  ***************/
@@ -192,5 +193,17 @@ int main()
 *   - nie rozwiązana zagadka friend. To chyba nie jest problem z namespace tylko właśnie z przyjaźnią.
 *   - czy istnieje coś takiego jak referencja do funkcji? To przecież też jest jakiś obiekt.
 *
-*   
+*   Zadania ze spotkania 16.08.2024
+*       - Praca z kodem: posprzątać, zbudować hierarchię dziedziczenia klasy Account
+*       - Praca z kodem: przeładowanie operator+() i operator-() - dodaj do rachunku i odejmij do rachunku
+*       - Literatura: doczytać Virtual Function in C++
+*       - Literatura: powtórzyć przeładowanie funkcji
+*
+*   Zadania ze spotkania 23.08.2024
+*       - Literatura: warto powtórnie przestudiować wirtualizm - niezwykle istotny mechanizm
+*       - Literatura: powtórzyć przeładowanie funkcji (zaległe z poprzedniego spotkania)
+*       - Praca z kodem: oba zadania z poprzedniego spotkania
+*  
+
+
 *******************************************************************************/

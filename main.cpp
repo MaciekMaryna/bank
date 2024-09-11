@@ -13,121 +13,119 @@
 /******************************************************************************
  * Defines and macros
  ******************************************************************************/
-#define NUMBER_OF_CLEINTS   10
-#define MAX_LIMIT_OF_FUNDS  1000000
-#define MIN_LEVEL_OF_FUNDS  -1000 //Can be negative in overdraft case
 
 /******************************************************************************
  * Typedefs
  ******************************************************************************/
-typedef enum
-{
-    O_OK,
-    NO_ENOUGH_FUNDS,
-    MAX_LIMIT_REACHED
-} Status_t;
 
 /******************************************************************************
  * Classes
  ******************************************************************************/
-
-/*************** class Person  ***************/
-class Person //Customer aggregation
-{
-    private:    
-        std::string Forename;
-        std::string Surname;
-        std::string HomeAddress;
-        std::string BirthDate;    
-    protected:        
-    public:
-
-    //friend std::ostream & operator<<(const std::ostream &, const Person); // Cały czas coś robię źle. Mimo przyjaźni, nie mogę sięgać do pól private. Dlatego obecnie są one w sekcji public
-    friend std::ostream & operator<<(std::ostream & Os, const Person & Prs);
-};
-
-/*************** class Account  ***************/
-class Account : Person
+/*********** Class Accout (abstract class) ***********/
+class Account
 {
     private:
-
-    protected:        
-
+    protected:
     public:
-        uint32_t IdNum;
-        std::string ExpiryDate;        
-        Person Owner;
-        double Funds;
-        Status_t LastOperationStatus;
-
-        Account Deposit(double);
-        Account Withdraw(double);
-        double Check();
-        Account &operator=(const double &);
-        Account operator+(const double &);
-        Account operator-(const double &);
-
-        friend std::ostream & operator<<(std::ostream &, const Account &);
+        uint64_t IBAN;
+        char DomesticCurrency[3];
+        double Balance;
+        void Deposit(const double);
+        void Withdraw(const double); 
+        double GetBalance(void);
+        void operator=(const double);
+        void operator+(const double);
+        void operator-(const double);
 };
 
-Account Account::Deposit(double dep)
+void Account::Deposit(const double dep)
 {
-    this -> LastOperationStatus = O_OK;
-    double FundsAfterOperation = (this -> Funds) + dep;
+    this -> Balance += dep;
+}
 
-    if (MAX_LIMIT_OF_FUNDS < FundsAfterOperation)
+void Account::Withdraw(const double wit)
+{
+        this -> Balance -= wit;
+}
+
+double Account::GetBalance(void)
+{
+    return this->Balance;
+}
+
+void Account::operator=(const double val)
+{
+    this -> Balance = val;
+}
+
+void Account::operator+(const double dep)
+{
+    Account::Deposit(dep);
+}
+
+void Account::operator-(const double wit)
+{
+    Account::Withdraw(wit);
+}
+
+/*************** Class CheckingAccout  ***************/
+class CheckingAccout : public Account
+{
+    private:
+    protected:
+    public:
+};
+
+/*********** Class PersonaAccount (debit) ************/
+class PersonalAccount : public Account
+{
+    private:
+    protected:
+    public:
+        double OverdraftLimit; // should be a positive number
+        float OverdraftInterestRate;
+        void PayOverdraftInterest(void);
+};
+
+void PersonalAccount::PayOverdraftInterest(void)
+{
+    if (this->Balance < 0)
     {
-        this -> LastOperationStatus = MAX_LIMIT_REACHED;
+        this->Balance *= (1 + this->OverdraftInterestRate);
     }
-    else 
-    {
-        this -> Funds = FundsAfterOperation;
-        this -> LastOperationStatus = O_OK;
-    }
-    return *this;
 }
 
-Account Account::Withdraw(double wit)
+
+/*************** Class SavingsAccout  ***************/
+class SavingsAccount : public Account
 {
-    this -> LastOperationStatus = O_OK;
-    double FundsAfterOperation = (this -> Funds) - wit;
-    if (MIN_LEVEL_OF_FUNDS > FundsAfterOperation)
-    {
-        this -> LastOperationStatus = NO_ENOUGH_FUNDS;
-    }
-    else
-    {
-        this -> Funds = FundsAfterOperation;
-        this -> LastOperationStatus = O_OK;
-    }
-    return *this;
+    private:
+    protected:
+    public:
+        float InterestRate;
+        void CapitaliesIterest(void);
+};
+
+void SavingsAccount::CapitaliesIterest(void)
+{
+    this->Balance *= (1 + this->InterestRate);
 }
 
-double Account::Check()
+/*********** Class ForeginCurrencyAccout  ***********/
+class ForeginCurrencyAccout : public Account
 {
-    return this -> Funds;
-}
+    private:
+    protected:
+    public:
+        char ForreignCurrency[3];
+};
 
-Account &Account::operator=(const double &val)
-{
-    this -> Funds = val;
-    return *this;
-}
 
-Account Account::operator+(const double &dep)
-{
-    return Account::Deposit(dep);
-}
-
-Account Account::operator-(const double &wit)
-{
-    return Account::Withdraw(wit);
-}
 
 /******************************************************************************
  * Non class-member functions
  ******************************************************************************/
-
+/*
 std::ostream & operator<<(std::ostream & Os, const Person & Prs) 
 {
     Os  << std::endl << "\t\tFORENAME:     " << Prs.Forename
@@ -147,39 +145,35 @@ std::ostream & operator<<(std::ostream & Os, const Account & Acc)
         << std::endl << "OWNER :           " << Acc.Owner;
     return Os;
 }
-
+*/
 /*******************************************************************************
 * Main function
 *******************************************************************************/
 int main()
 {
-    Person Clients[NUMBER_OF_CLEINTS];
+    /*
+    TOTO
+    Przeciążyć GetBalance tak żeby zwracało watość 
+    Przeciążyć +
+    Przciążyć - 
+    */
+    CheckingAccout MyAccount1;
+    MyAccount1.Deposit(1000);
+    MyAccount1.Withdraw(5);
+    std::cout<<"Balance: "<< MyAccount1.GetBalance()<<std::endl;
 
-    Clients[0].Forename = "Mayer";
-    Clients[0].Surname = "Jane";
-    Clients[0].HomeAddress = "123 Main St, Apt 4B, Springfield, IL 62704";
-    Clients[0].BirthDate = "12/12/2002";
+    PersonalAccount MyAccount2;
+    MyAccount2.OverdraftInterestRate = 5.0/100;
+    MyAccount2.Deposit(2000);
+    MyAccount2.Withdraw(3000);
+    MyAccount2.PayOverdraftInterest();
+    std::cout<<"Balance: "<< MyAccount2.GetBalance()<<std::endl;
 
-    std::cout << Clients[0] << std::endl;
-
-    Account MyAccount;
-    MyAccount.IdNum = 1;
-    MyAccount.ExpiryDate = "01/01/2025";
-    MyAccount.Owner = Clients[0];
-    MyAccount.Funds = 0;
-    std::cout << MyAccount << std::endl;
-
-    MyAccount.Deposit(200);
-    MyAccount.Deposit(100);
-    MyAccount.Withdraw(550);
-    std::cout << MyAccount << std::endl;
-
-    MyAccount = MyAccount - 2000;
-    std::cout << MyAccount << std::endl;
-
-    MyAccount = MyAccount + 1000;
-    std::cout << MyAccount << std::endl;
-
+    SavingsAccount MyAccount3;
+    MyAccount3.InterestRate = 2.0/100;
+    MyAccount3.Deposit(100);
+    MyAccount3.CapitaliesIterest();
+    std::cout<<"Balance: "<< MyAccount3.GetBalance()<<std::endl;
     return 0;
 }
 

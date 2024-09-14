@@ -17,25 +17,54 @@
 /******************************************************************************
  * Typedefs
  ******************************************************************************/
-
+typedef enum 
+{
+    PLN = 0,
+    EUR,
+    USD,
+    CHF,
+    RUB,
+    RUP,
+    SEK,
+    HOK,
+    HUF
+} Currencies_t;
 /******************************************************************************
  * Classes
  ******************************************************************************/
-/*********** Class Accout (abstract class) ***********/
+/*********** Class Accout (base class) ***********/
 class Account
 {
     private:
     protected:
     public:
         uint64_t IBAN;
-        char DomesticCurrency[3];
+        Currencies_t DomesticCurrency;
         double Balance;
         void Deposit(const double);
         void Withdraw(const double); 
         double GetBalance(void);
-        void operator=(const double);
-        void operator+(const double);
-        void operator-(const double);
+        void operator+=(double);
+        void operator-=(double);
+        friend std::ostream & operator<<(std::ostream & console, const Account &obj) // *** dlaczego nie mogę definicji wynieść poza klasę?
+        {
+            console << obj.Balance;
+            return console;
+        }
+
+        Account()
+        {
+            this->IBAN = (uint64_t)0;
+            this->DomesticCurrency = PLN;
+            this->Balance = (double)0;            
+        }
+
+        Account(uint64_t iban, double bal): IBAN(iban), Balance(bal)
+        {
+            this->IBAN = (uint64_t)0;
+            this->DomesticCurrency = PLN;
+            this->Balance = (double)0;            
+        }
 };
 
 void Account::Deposit(const double dep)
@@ -53,19 +82,14 @@ double Account::GetBalance(void)
     return this->Balance;
 }
 
-void Account::operator=(const double val)
+void Account::operator+=(double dep)
 {
-    this -> Balance = val;
+    this->Balance += dep;
 }
 
-void Account::operator+(const double dep)
+void Account::operator-=(double wit)
 {
-    Account::Deposit(dep);
-}
-
-void Account::operator-(const double wit)
-{
-    Account::Withdraw(wit);
+    this->Balance -= wit;
 }
 
 /*************** Class CheckingAccout  ***************/
@@ -103,10 +127,10 @@ class SavingsAccount : public Account
     protected:
     public:
         float InterestRate;
-        void CapitaliesIterest(void);
+        void CapitaliseIterest(void);
 };
 
-void SavingsAccount::CapitaliesIterest(void)
+void SavingsAccount::CapitaliseIterest(void)
 {
     this->Balance *= (1 + this->InterestRate);
 }
@@ -117,7 +141,7 @@ class ForeginCurrencyAccout : public Account
     private:
     protected:
     public:
-        char ForreignCurrency[3];
+        Currencies_t ForreignCurrency;
 };
 
 
@@ -151,29 +175,39 @@ std::ostream & operator<<(std::ostream & Os, const Account & Acc)
 *******************************************************************************/
 int main()
 {
-    /*
-    TOTO
-    Przeciążyć GetBalance tak żeby zwracało watość 
-    Przeciążyć +
-    Przciążyć - 
-    */
     CheckingAccout MyAccount1;
-    MyAccount1.Deposit(1000);
-    MyAccount1.Withdraw(5);
-    std::cout<<"Balance: "<< MyAccount1.GetBalance()<<std::endl;
+    MyAccount1 += 1000;
+    MyAccount1 -= 5;
+    std::cout<<"Balance: "<< MyAccount1 <<std::endl;
 
     PersonalAccount MyAccount2;
     MyAccount2.OverdraftInterestRate = 5.0/100;
-    MyAccount2.Deposit(2000);
-    MyAccount2.Withdraw(3000);
+    MyAccount2 += 2000;
+    MyAccount2 -= 3000;
     MyAccount2.PayOverdraftInterest();
-    std::cout<<"Balance: "<< MyAccount2.GetBalance()<<std::endl;
+    std::cout<<"Balance: "<< MyAccount2 <<std::endl;
 
     SavingsAccount MyAccount3;
     MyAccount3.InterestRate = 2.0/100;
-    MyAccount3.Deposit(100);
-    MyAccount3.CapitaliesIterest();
-    std::cout<<"Balance: "<< MyAccount3.GetBalance()<<std::endl;
+    MyAccount3 -= 100;
+    MyAccount3.CapitaliseIterest();
+    std::cout<<"Balance: "<< MyAccount3 <<std::endl;
+
+    MyAccount3 += 5000;
+    MyAccount3 -= 1000;
+    std::cout<<"Balance: "<< MyAccount3 <<std::endl;
+
+    // vector<Account*> accounts = {&MyAccount1, &MyAccount2, &MyAccount3};
+    // accounts.insert (&MyAccount4);
+    
+    Account* myTab[] = {&MyAccount1, &MyAccount2, &MyAccount3}; //Jak hurtowo zwiększyć balans
+
+    for (int i = 0; i < sizeof(myTab)/sizeof(myTab[0]); i++)
+    {
+        myTab[i] -> Balance += 3;
+        std::cout<<"Balance: "<< myTab[i] -> Balance <<std::endl;
+    }
+
     return 0;
 }
 
@@ -197,7 +231,18 @@ int main()
 *       - Literatura: warto powtórnie przestudiować wirtualizm - niezwykle istotny mechanizm
 *       - Literatura: powtórzyć przeładowanie funkcji (zaległe z poprzedniego spotkania)
 *       - Praca z kodem: oba zadania z poprzedniego spotkania
-*  
-
-
+*
+*   Zadania ze spotkania 13.09.2024  
+*       - diagram klas uml
+*       - Jak hurtowo zwiększyć balans  
+*       - Generyczne (hurtowe) podejście do obiektów
+*       - Powtórzenie przeładowań
+*
+*   1. Czy możliwa i sensowna jest sytuacja kiedy klasa posiada dwa konstruktory inicjujące.
+*      Pierwszy, który inicjuje podstawowy set parametrów, a drugi który inicjuje więcej parametrów,
+*      ale w taki sposób, ze zawoła ten podstawowy i dodatkowao zainicjuje w swoim ciele jeszcze dodatkowe.
+*   2. Czy sensowne jest przerobienie typu enum Currencies_t na prostą klasę?
+*   3. Przeładowałem operator+=() i operator-=(). Nie bardzo rozumiem celowość przeciążania operator+() i operator-(). 
+*   4. Przeładowałem operator<<, ale są pytania ***
+*
 *******************************************************************************/

@@ -33,3 +33,6 @@
 
 # Log files
 *.log
+
+# build folder
+build/

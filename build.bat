@@ -1,5 +1,9 @@
 mkdir build
 cd build
-cmake -G "Unix Makefiles" ..
-make
+rem cmake -G "Unix Makefiles" ..
+rem make
+
+cmake -G "Ninja" ..
+ninja 
+
 

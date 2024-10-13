@@ -472,7 +472,14 @@ int main()
 *       - status operacji, stan przed i stan po - dużo kodu nadmiarowego
 *       - w takim podejściu getery nie mogą zwracać statusu
 *       - temat waluty jest źle wymyślony z logicznego punktu widzenia. 
-*
+*       
+*   Zadania ze spotkania 11.10.2024:
+*       - Wyprostować build system: spróbować cmake, ale w przypadku trudności można wrócić do skryptów batch-owych
+*       - Waluta jest cechą konta nadaną przy konstrowaniu - nie kombinujemy.  
+*       - LastBalance, jako pole przechowywane w koncie nie jest dobrym pomysłem. Lepiej zbudować jakiś
+*         mechanizm (np. kolejkę) historycznych operacji na koncie i z każdą nową operacją dodawać rekord 
+*         do tej struktury danych. Dlatego wycofujemy się z pomysłu LastOperation, 
+*         który de facto od początku był zły i sztuczny. 
 *
 *
 *

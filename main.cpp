@@ -11,7 +11,6 @@
 #include <iostream>
 #include <iomanip>
 #include <chrono>
-#include <stdint.h>
 
 /******************************************************************************
  * Project specific includes
@@ -22,32 +21,6 @@
  * Typedefs
  ******************************************************************************/
 
-enum Status_t
-{
-    OPERATION_OK = 0,
-    COMMON_FAULT,
-    NO_ANOUGH_FUNDS,
-    NO_ANOUGH_DEBIT,
-    NO_ANOUGH_CURRENCY,
-    CANNOT_SET_SUCH_BALANCE,
-    INVALID_CURRENCY_NAME,
-    INVALID_IBAN_NUMBER,
-
-    NUMBER_OF_STATUSES
-};
-
-std::string ErrorNames[] =
-{
-    "OPERATION_OK",
-    "COMMON_FAULT",
-    "NO_ANOUGH_FUNDS",
-    "NO_ANOUGH_DEBIT",
-    "NO_ANOUGH_CURRENCY",
-    "CANNOT_SET_SUCH_BALANCE",
-    "INVALID_CURRENCY_NAME",
-    "INVALID_IBAN_NUMBER"
-};
-
 /******************************************************************************
  * Global variables
  ******************************************************************************/
@@ -56,194 +29,11 @@ std::string DomesticCurrency = "PLN";
 /******************************************************************************
  * Classes
  ******************************************************************************/
-/*********** Class Accout (base class) ***********/
-class Account
-{
-    private:
-
-    protected:
-        uint64_t IBAN;
-        double Balance;
-        double BalanceOld = 0;   
-        Status_t LastOperStatus = OPERATION_OK;        
-        std::string Currency = "---";        //czy wartości początkowe można nadać wyłącznie konstruktorem lub seterem, a nie w ten sposób?
-    public:
-        void Set_IBAN(const uint64_t);
-        uint64_t Get_IBAN(void);
-        void Set_Balance(const double);
-        double Get_Balance(void);        
-        double Get_BalanceOld(void);
-        Status_t Get_LastOperStatus(void);
-        std::string Get_Currency(void);
-        void Set_Currency(std::string);        
-        void Deposit(const double);        
-        virtual void Withdraw(const double) = 0;         
-        void operator+=(const double);
-        void operator-=(const double);
-        friend std::ostream & operator<<(std::ostream &, const Account &); 
-        Account()
-        {
-            this -> IBAN = (uint64_t)0;
-            this -> Currency = DomesticCurrency;
-            this -> Balance = (double)0;            
-        }
-
-        Account(uint64_t iban, double bal, std::string cur)
-        {
-            this -> IBAN = iban;
-            this -> Currency = cur;
-            this -> Balance = bal;            
-        }
-};
 
 std::ostream & operator<<(std::ostream & console, const Account &obj)
 {
     console << obj.Balance;
     return console;
-}
-
-void Account::Deposit(const double dep)
-{
-    this -> BalanceOld = this -> Balance;
-    this -> Balance += dep;
-    this -> LastOperStatus = OPERATION_OK;
-}
-
-void Account::Set_IBAN(const uint64_t iban)
-{
-    if (0 != iban)
-    {
-        this -> IBAN = iban;
-        this -> LastOperStatus = OPERATION_OK;
-    }
-    else
-    {
-        this -> LastOperStatus = INVALID_IBAN_NUMBER;       
-    }
-}
-
-uint64_t Account::Get_IBAN(void)
-{
-    return this -> IBAN;
-}
-
-void Account::Set_Balance(const double bal)
-{
-    this -> BalanceOld = this -> Balance;
-    this -> Balance = bal;
-}
-
-double Account::Get_Balance(void)
-{
-    return this -> Balance;
-}
-
-double Account::Get_BalanceOld(void)
-{
-    return this -> BalanceOld;
-}
-
-std::string Account::Get_Currency(void)
-{
-    std::string result;
-    if (3 != this -> Currency.length())
-    {
-        result = "---\0";
-    }
-    else
-    {
-        result = this -> Currency;
-    }
-    return result;
-}
-
-void Account::Set_Currency(std::string curr)
-{
-    if (3 != curr.length())
-    {
-        this -> LastOperStatus = INVALID_CURRENCY_NAME;
-    }
-    else
-    {
-        this -> Currency = curr;
-        this -> LastOperStatus = OPERATION_OK;
-    }
-}
-
-Status_t Account::Get_LastOperStatus(void)
-{
-    return this -> LastOperStatus;
-}
-
-void Account::operator+=(const double dep)
-{
-    this -> BalanceOld = this -> Balance;
-    this -> Balance += dep;
-}
-
-void Account::operator-=(const double wit)
-{
-    this -> BalanceOld = this -> Balance;
-    this -> Balance -= wit;
-}
-
-/*************** Class CheckingAccout  ***************/
-class CheckingAccout : public Account
-{
-    private:
-    protected:
-    public:
-        void PayOverdraftInterest(void);    
-        void Withdraw(const double) override;      
-};
-
-void CheckingAccout::Withdraw(const double wit)
-{
-    if(Balance - wit < 0)
-    {
-        this -> LastOperStatus = NO_ANOUGH_FUNDS;
-    }
-    else 
-    {
-        this -> BalanceOld = this -> Balance;
-        this -> Balance -= wit;
-        this -> LastOperStatus = OPERATION_OK;
-    }
-}
-
-/*********** Class PersonalAccount (debit) ************/
-class PersonalAccount : public Account
-{
-    private:
-    protected:
-    public:
-        double OverdraftLimit; // should be a positive number
-        float OverdraftInterestRate;
-        void PayOverdraftInterest(void);
-        void Withdraw(const double) override;
-};
-
-void PersonalAccount::Withdraw(const double wit)
-{
-    if(Balance - wit < (-OverdraftLimit))
-    {
-        this -> LastOperStatus = NO_ANOUGH_DEBIT;        
-    }
-    else 
-    {
-        this -> BalanceOld = this -> Balance;
-        this -> Balance -= wit;
-        this -> LastOperStatus = OPERATION_OK; 
-    }
-} 
-
-void PersonalAccount::PayOverdraftInterest(void)
-{
-    if (this->Balance < 0)
-    {
-        this -> BalanceOld = this -> Balance;
-        this -> Balance *= (1 + this->OverdraftInterestRate);
-    }
 }
 
 /*************** Class SavingsAccout  ***************/

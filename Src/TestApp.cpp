@@ -1,16 +1,15 @@
 /******************************************************************************
- * Common includes
+ * Includes
  ******************************************************************************/
 #include <iostream>
 #include <iomanip>
 #include <chrono>
 #include <stdint.h>
-/******************************************************************************
- * Module specific includes
- ******************************************************************************/
-#include "../Inc/TestApp.hpp"
-
-#include "C:\repos\bank\Inc\TestApp.hpp"
+#include "Account.hpp"
+#include "CheckingAccount.hpp"
+#include "PersonalAccount.hpp"
+#include "SavingsAccount.hpp"
+#include "ForeginCurrencyAccount.hpp"
 
 /******************************************************************************
  * Global variables
@@ -20,7 +19,7 @@ uint32_t OperationNumber;
 /*******************************************************************************
 * Function: TestApp_ShowSeparationLine 
 *******************************************************************************/
-void TestApp_TestApp_ShowSeparationLine(void)
+void TestApp_ShowSeparationLine(void)
 {
     std::cout << "+-----+----------------------------+------------------+------------------+--------------------------------+" << std::endl;    
 }
@@ -28,11 +27,11 @@ void TestApp_TestApp_ShowSeparationLine(void)
 /*******************************************************************************
 * Function: TestApp_ShowColumnNames 
 ********************************************************************************/
-void TestApp_TestApp_ShowColumnNames(void)
+void TestApp_ShowColumnNames(void)
 {
-    TestApp_TestApp_ShowSeparationLine();
+    TestApp_ShowSeparationLine();
     std::cout << "| No. | IBAN number                | BalaceBefore     | BalanceAfter     | OperStatus                     |" << std::endl;
-    TestApp_TestApp_ShowSeparationLine();
+    TestApp_ShowSeparationLine();
 }
 
 /*******************************************************************************
@@ -58,11 +57,11 @@ void TestApp_ShowLastOperationReport(Account* Tab)
 void TestApp_Run(void)
 {
     TestApp_ShowColumnNames();
-    CheckingAccout MyAccount1;
+    CheckingAccount MyAccount1;
     MyAccount1.Set_IBAN(0);
     PersonalAccount MyAccount2;    
     SavingsAccount MyAccount3; 
-    ForeginCurrencyAccout MyAccount4;   
+    ForeginCurrencyAccount MyAccount4;   
 
     MyAccount2.OverdraftLimit = 1000;    
 

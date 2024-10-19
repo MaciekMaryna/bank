@@ -1,27 +1,44 @@
+/******************************************************************************
+ * Common includes
+ ******************************************************************************/
+#include <iostream>
+#include <iomanip>
+#include <chrono>
+#include <stdint.h>
+/******************************************************************************
+ * Module specific includes
+ ******************************************************************************/
 #include "../Inc/TestApp.hpp"
 
+#include "C:\repos\bank\Inc\TestApp.hpp"
+
+/******************************************************************************
+ * Global variables
+ ******************************************************************************/
+uint32_t OperationNumber;
+
 /*******************************************************************************
-* Function: ShowSeparationLine 
+* Function: TestApp_ShowSeparationLine 
 *******************************************************************************/
-void ShowSeparationLine(void)
+void TestApp_TestApp_ShowSeparationLine(void)
 {
     std::cout << "+-----+----------------------------+------------------+------------------+--------------------------------+" << std::endl;    
 }
 
 /*******************************************************************************
-* Function: ShowColumnsNames 
+* Function: TestApp_ShowColumnNames 
 ********************************************************************************/
-void ShowColumnsNames(void)
+void TestApp_TestApp_ShowColumnNames(void)
 {
-    ShowSeparationLine();
+    TestApp_TestApp_ShowSeparationLine();
     std::cout << "| No. | IBAN number                | BalaceBefore     | BalanceAfter     | OperStatus                     |" << std::endl;
-    ShowSeparationLine();
+    TestApp_TestApp_ShowSeparationLine();
 }
 
 /*******************************************************************************
-* Function: ShowLastOperationRaport 
+* Function: TestApp_ShowLastOperationReport 
 ********************************************************************************/
-void ShowLastOperationRaport(Account* Tab)
+void TestApp_ShowLastOperationReport(Account* Tab)
 {
     std::cout <<    std::right << "| " <<
                     std::setw(3) << std::setfill('0') << OperationNumber  << " | " <<
@@ -33,5 +50,71 @@ void ShowLastOperationRaport(Account* Tab)
                     std::left << 
                     std::setw(30) << std::setfill(' ') << ErrorNames[Tab -> Get_LastOperStatus()]  <<  " | " <<
                     std::endl;
+}
+
+/*******************************************************************************
+* Function: TestApp_Run 
+********************************************************************************/
+void TestApp_Run(void)
+{
+    TestApp_ShowColumnNames();
+    CheckingAccout MyAccount1;
+    MyAccount1.Set_IBAN(0);
+    PersonalAccount MyAccount2;    
+    SavingsAccount MyAccount3; 
+    ForeginCurrencyAccout MyAccount4;   
+
+    MyAccount2.OverdraftLimit = 1000;    
+
+    // vector<Account*> accounts = {&MyAccount1, &MyAccount2, &MyAccount3};
+    // accounts.insert (&MyAccount4);
+    
+    Account* MyTab[] = {&MyAccount1, &MyAccount2, &MyAccount3, &MyAccount4};
+
+    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
+    {
+        MyTab[i] -> Set_Currency("PL");
+        OperationNumber++;        
+        TestApp_ShowLastOperationReport(MyTab[i]);
+    }
+    TestApp_ShowSeparationLine();
+
+    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
+    {
+        MyTab[i] -> Set_Currency("PLN");
+        OperationNumber++;
+        TestApp_ShowLastOperationReport(MyTab[i]);
+    }
+    TestApp_ShowSeparationLine();
+
+    MyAccount4.Set_Currency("CHF");
+    OperationNumber++;
+    TestApp_ShowLastOperationReport(&MyAccount4);
+    TestApp_ShowSeparationLine();
+
+
+    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
+    {
+        MyTab[i] -> Set_Balance(1000);
+        OperationNumber++;
+        TestApp_ShowLastOperationReport(MyTab[i]);
+    }
+    TestApp_ShowSeparationLine();
+
+    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
+    {
+        MyTab[i] -> Withdraw(1001);    
+        OperationNumber++;
+        TestApp_ShowLastOperationReport(MyTab[i]);        
+    }    
+    TestApp_ShowSeparationLine();
+
+    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
+    {
+        MyTab[i] -> Deposit(300); 
+        OperationNumber++;
+        TestApp_ShowLastOperationReport(MyTab[i]);        
+    }    
+    TestApp_ShowSeparationLine();
 }
 

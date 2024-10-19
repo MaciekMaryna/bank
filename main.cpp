@@ -51,7 +51,6 @@ std::string ErrorNames[] =
 /******************************************************************************
  * Global variables
  ******************************************************************************/
-uint32_t OperationNumber;
 std::string DomesticCurrency = "PLN";
 
 /******************************************************************************
@@ -309,7 +308,7 @@ void ShowSeparationLine(void)
     std::cout << "+-----+----------------------------+------------------+------------------+--------------------------------+" << std::endl;    
 }
 
-void ShowColumnsNames(void)
+void ShowColumnNames(void)
 {
     ShowSeparationLine();
     std::cout << "| No. | IBAN number                | BalaceBefore     | BalanceAfter     | OperStatus                     |" << std::endl;
@@ -336,73 +335,8 @@ void ShowLastOperationRaport(Account* Tab)
 int main()
 {
 
-    ShowColumnsNames();
-    CheckingAccout MyAccount1;
-    MyAccount1.Set_IBAN(0);
-    PersonalAccount MyAccount2;    
-    SavingsAccount MyAccount3; 
-    ForeginCurrencyAccout MyAccount4;   
+    TestApp_Run();
 
-    MyAccount2.OverdraftLimit = 1000;    
-
-    // vector<Account*> accounts = {&MyAccount1, &MyAccount2, &MyAccount3};
-    // accounts.insert (&MyAccount4);
-    
-    Account* MyTab[] = {&MyAccount1, &MyAccount2, &MyAccount3, &MyAccount4};
-
-    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
-    {
-        MyTab[i] -> Set_Currency("PL");
-        OperationNumber++;        
-        ShowLastOperationRaport(MyTab[i]);
-    }
-    ShowSeparationLine();
-
-    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
-    {
-        MyTab[i] -> Set_Currency("PLN");
-        OperationNumber++;
-        ShowLastOperationRaport(MyTab[i]);
-    }
-    ShowSeparationLine();
-
-    MyAccount4.Set_Currency("CHF");
-    OperationNumber++;
-    ShowLastOperationRaport(&MyAccount4);
-    ShowSeparationLine();
-
-
-    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
-    {
-        MyTab[i] -> Set_Balance(1000);
-        OperationNumber++;
-        ShowLastOperationRaport(MyTab[i]);
-    }
-    ShowSeparationLine();
-
-    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
-    {
-        MyTab[i] -> Withdraw(1001);    
-        OperationNumber++;
-        ShowLastOperationRaport(MyTab[i]);        
-    }    
-    ShowSeparationLine();
-
-    for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
-    {
-        MyTab[i] -> Deposit(300); 
-        OperationNumber++;
-        ShowLastOperationRaport(MyTab[i]);        
-    }    
-    ShowSeparationLine();
-
-/*
-    for (Account *acc:MyTab)
-    {
-        acc-> Balance += 3;
-        std::cout<<"Balance: "<< acc -> Balance <<std::endl;     
-    }
-*/
     return 0;
 }
 
@@ -450,7 +384,7 @@ int main()
 *           indywidualną wersję? Wszystkie abstrakcyjne wersje w jednym miejscu - np. tuż po klasie abstrakcyjnej? Czy może rozrzucone 
 *           po klasach szczegółowych - ja umieściłem je tuż po definicji klasy jako zawsze pierwszą implementowaną metodę danej klasy. Odp: Nie, za to podział na pliki (plik per klasa)
 *       - po co jest ""=0" Odp: oznacza, że klasa bazowa nie posiada implementacji danej metody, za to każdy potomek musi ją dostarczyć
-         (C++11 wprwowadza słówko override, aby z perspektywy klasy dziedziczącej było widać, ze po stronie klasy macieżystej jesy to metoda typu virtual)
+*         (C++11 wprwowadza słówko override, aby z perspektywy klasy dziedziczącej było widać, ze po stronie klasy macieżystej jesy to metoda typu virtual)
 *   
 *   Zadania ze spotkania 04.10.2024:
 *       - podzielić na pliki
@@ -469,8 +403,11 @@ int main()
 *       - LastBalance, jako pole przechowywane w koncie nie jest dobrym pomysłem. Lepiej zbudować jakiś
 *         mechanizm (np. kolejkę) historycznych operacji na koncie i z każdą nową operacją dodawać rekord 
 *         do tej struktury danych. Dlatego wycofujemy się z pomysłu LastOperation, 
-*         który de facto od początku był zły i sztuczny. 
-*
+*         który de facto od początku był zły i sztuczny.
+* 
+*    Zadania ze spotkania 18.10.2024:
+*       - Dokończyć konfiurację build systemu cmake
+*       - Kontynuować zadania z poprzedniego tygodnia
 *
 *
 *

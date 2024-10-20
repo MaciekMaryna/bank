@@ -36,89 +36,10 @@ std::ostream & operator<<(std::ostream & console, const Account &obj)
     return console;
 }
 
-/*************** Class SavingsAccout  ***************/
-class SavingsAccount : public Account
-{
-    private:
-    protected:
-    public:
-        float InterestRate;
-        void CapitaliseIterest(void);
-        void Withdraw(const double) override;           
-};
-
-void SavingsAccount::Withdraw(const double wit)
-{
-    if(Balance - wit < 0)
-    {
-        this -> LastOperStatus = NO_ANOUGH_FUNDS;        
-    }
-    else 
-    {   
-        this -> BalanceOld = this -> Balance;
-        this -> Balance -= wit;
-        this -> LastOperStatus = OPERATION_OK;        
-    }
-} 
-
-void SavingsAccount::CapitaliseIterest(void)
-{
-    this -> BalanceOld = this -> Balance;
-    this -> Balance *= (1 + this->InterestRate);
-}
-
-/*********** Class ForeginCurrencyAccout  ***********/
-class ForeginCurrencyAccout : public Account
-{
-    private:
-    protected:
-    public:
-        void Withdraw(const double) override;               
-};
-
-void ForeginCurrencyAccout::Withdraw(const double wit)
-{
-    if(Balance - wit < 0)
-    {
-        this -> LastOperStatus = NO_ANOUGH_FUNDS;
-    }
-    else 
-    {
-        this -> BalanceOld = this -> Balance;
-        this -> Balance -= wit;
-        this -> LastOperStatus = OPERATION_OK;
-    }
-} 
 /*******************************************************************************
 * Common non class-member functions
 *******************************************************************************/
-/*
-void ShowSeparationLine(void)
-{
-    std::cout << "+-----+----------------------------+------------------+------------------+--------------------------------+" << std::endl;    
-}
 
-void ShowColumnNames(void)
-{
-    ShowSeparationLine();
-    std::cout << "| No. | IBAN number                | BalaceBefore     | BalanceAfter     | OperStatus                     |" << std::endl;
-    ShowSeparationLine();
-}
-
-void ShowLastOperationRaport(Account* Tab)
-{
-    std::cout <<    std::right << "| " <<
-                    std::setw(3) << std::setfill('0') << OperationNumber  << " | " <<
-                    std::setw(26) << std::setfill(' ') << Tab -> Get_IBAN() << " | " << 
-                    std::setw(12) << std::setfill(' ') << Tab -> Get_BalanceOld() << " " << 
-                    std::setw(3) << Tab -> Get_Currency() <<  " | " <<
-                    std::setw(12) << std::setfill(' ') << Tab -> Get_Balance()  <<  " " <<
-                    std::setw(3) << Tab -> Get_Currency() <<  " | " <<
-                    std::left << 
-                    std::setw(30) << std::setfill(' ') << ErrorNames[Tab -> Get_LastOperStatus()]  <<  " | " <<
-                    std::endl;
-}
-*/
 /*******************************************************************************
 * Main function
 *******************************************************************************/

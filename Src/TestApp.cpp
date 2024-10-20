@@ -57,13 +57,17 @@ void TestApp_ShowLastOperationReport(Account* Tab)
 void TestApp_Run(void)
 {
     TestApp_ShowColumnNames();
+
     CheckingAccount MyAccount1;
     MyAccount1.Set_IBAN(0);
-    PersonalAccount MyAccount2;    
-    SavingsAccount MyAccount3; 
-    ForeginCurrencyAccount MyAccount4;   
 
-    MyAccount2.OverdraftLimit = 1000;    
+    PersonalAccount MyAccount2;    
+    MyAccount2.Set_OverdraftLimit(1000);        
+    MyAccount2.Set_OverdraftInterestRate(0.15);
+
+    SavingsAccount MyAccount3; 
+
+    ForeginCurrencyAccount MyAccount4;   
 
     // vector<Account*> accounts = {&MyAccount1, &MyAccount2, &MyAccount3};
     // accounts.insert (&MyAccount4);

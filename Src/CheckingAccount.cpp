@@ -2,7 +2,7 @@
  * Includes
  ******************************************************************************/
 #include "Account.hpp"
-
+#include "CheckingAccount.hpp"
 /*************** Class CheckingAccount  ***************/
 
 void CheckingAccount::Withdraw(const double wit)

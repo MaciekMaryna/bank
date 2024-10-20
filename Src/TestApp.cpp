@@ -21,7 +21,7 @@ uint32_t OperationNumber;
 *******************************************************************************/
 void TestApp_ShowSeparationLine(void)
 {
-    std::cout << "+-----+----------------------------+------------------+------------------+--------------------------------+" << std::endl;    
+    std::cout << "+-----+----------------------------+------------------+" << std::endl;    
 }
 
 /*******************************************************************************
@@ -30,24 +30,20 @@ void TestApp_ShowSeparationLine(void)
 void TestApp_ShowColumnNames(void)
 {
     TestApp_ShowSeparationLine();
-    std::cout << "| No. | IBAN number                | BalaceBefore     | BalanceAfter     | OperStatus                     |" << std::endl;
+    std::cout << "| No. | IBAN number                | Balance          |" << std::endl;
     TestApp_ShowSeparationLine();
 }
 
 /*******************************************************************************
-* Function: TestApp_ShowLastOperationReport 
+* Function: TestApp_ShowReport 
 ********************************************************************************/
-void TestApp_ShowLastOperationReport(Account* Tab)
+void TestApp_ShowReport(Account* Tab)
 {
     std::cout <<    std::right << "| " <<
-                    std::setw(3) << std::setfill('0') << OperationNumber  << " | " <<
+                    std::setw(3) << std::setfill(' ') << OperationNumber  << " | " <<
                     std::setw(26) << std::setfill(' ') << Tab -> Get_IBAN() << " | " << 
-                    std::setw(12) << std::setfill(' ') << Tab -> Get_BalanceOld() << " " << 
-                    std::setw(3) << Tab -> Get_Currency() <<  " | " <<
                     std::setw(12) << std::setfill(' ') << Tab -> Get_Balance()  <<  " " <<
                     std::setw(3) << Tab -> Get_Currency() <<  " | " <<
-                    std::left << 
-                    std::setw(30) << std::setfill(' ') << ErrorNames[Tab -> Get_LastOperStatus()]  <<  " | " <<
                     std::endl;
 }
 
@@ -56,10 +52,12 @@ void TestApp_ShowLastOperationReport(Account* Tab)
 ********************************************************************************/
 void TestApp_Run(void)
 {
+
+
     TestApp_ShowColumnNames();
 
     CheckingAccount MyAccount1;
-    MyAccount1.Set_IBAN(0);
+    //MyAccount1.Set_IBAN(0);
 
     PersonalAccount MyAccount2;    
     MyAccount2.Set_OverdraftLimit(1000);        
@@ -78,7 +76,7 @@ void TestApp_Run(void)
     {
         MyTab[i] -> Set_Currency("PL");
         OperationNumber++;        
-        TestApp_ShowLastOperationReport(MyTab[i]);
+        TestApp_ShowReport(MyTab[i]);
     }
     TestApp_ShowSeparationLine();
 
@@ -86,13 +84,13 @@ void TestApp_Run(void)
     {
         MyTab[i] -> Set_Currency("PLN");
         OperationNumber++;
-        TestApp_ShowLastOperationReport(MyTab[i]);
+        TestApp_ShowReport(MyTab[i]);
     }
     TestApp_ShowSeparationLine();
 
     MyAccount4.Set_Currency("CHF");
     OperationNumber++;
-    TestApp_ShowLastOperationReport(&MyAccount4);
+    TestApp_ShowReport(&MyAccount4);
     TestApp_ShowSeparationLine();
 
 
@@ -100,7 +98,7 @@ void TestApp_Run(void)
     {
         MyTab[i] -> Set_Balance(1000);
         OperationNumber++;
-        TestApp_ShowLastOperationReport(MyTab[i]);
+        TestApp_ShowReport(MyTab[i]);
     }
     TestApp_ShowSeparationLine();
 
@@ -108,7 +106,7 @@ void TestApp_Run(void)
     {
         MyTab[i] -> Withdraw(1001);    
         OperationNumber++;
-        TestApp_ShowLastOperationReport(MyTab[i]);        
+        TestApp_ShowReport(MyTab[i]);        
     }    
     TestApp_ShowSeparationLine();
 
@@ -116,7 +114,7 @@ void TestApp_Run(void)
     {
         MyTab[i] -> Deposit(300); 
         OperationNumber++;
-        TestApp_ShowLastOperationReport(MyTab[i]);        
+        TestApp_ShowReport(MyTab[i]);        
     }    
     TestApp_ShowSeparationLine();
 }

@@ -6,6 +6,8 @@
  ******************************************************************************/
 #include "Account.hpp"
 
+uint64_t Account::NumberOfInctances = 1; //static member of class need to have initialisation out of the class
+
 void TestApp_ShowSeparationLine(void);
 void TestApp_ShowColumnNames(void);
 void TestApp_ShowLastOperationReport(Account* Tab);

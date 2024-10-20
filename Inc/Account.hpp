@@ -10,6 +10,8 @@
 /******************************************************************************
  * Typedefs
  ******************************************************************************/
+/* 
+    keep for the future
 
 enum Status_t
 {
@@ -36,6 +38,7 @@ std::string ErrorNames[] =
     "INVALID_CURRENCY_NAME",
     "INVALID_IBAN_NUMBER"
 };
+*/
 
 /*********** Class Account (base class) ***********/
 class Account
@@ -43,18 +46,15 @@ class Account
     private:
 
     protected:
+        static uint64_t NumberOfInctances;
         uint64_t IBAN;
         double Balance;
-        double BalanceOld = 0;   
-        Status_t LastOperStatus = OPERATION_OK;        
-        std::string Currency = "---";        //czy wartości początkowe można nadać wyłącznie konstruktorem lub seterem, a nie w ten sposób?
+        std::string Currency; // = "---";        //czy wartości początkowe można nadać wyłącznie konstruktorem lub seterem, a nie w ten sposób?
     public:
         void Set_IBAN(const uint64_t);
         uint64_t Get_IBAN(void);
         void Set_Balance(const double);
         double Get_Balance(void);        
-        double Get_BalanceOld(void);
-        Status_t Get_LastOperStatus(void);
         std::string Get_Currency(void);
         void Set_Currency(std::string);        
         void Deposit(const double);        
@@ -63,7 +63,7 @@ class Account
         void operator-=(const double);
         friend std::ostream & operator<<(std::ostream &, const Account &); 
         Account();
-        Account(uint64_t iban, double bal, std::string cur);
+        // Account(uint64_t iban, double bal, std::string cur);
 };
 
 #endif /* #ifndef ACCOUNT_H */

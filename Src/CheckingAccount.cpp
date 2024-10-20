@@ -5,16 +5,19 @@
 #include "CheckingAccount.hpp"
 /*************** Class CheckingAccount  ***************/
 
+CheckingAccount::CheckingAccount()
+{
+    this -> IBAN = Account::IBAN;
+}
+
 void CheckingAccount::Withdraw(const double wit)
 {
     if(Balance - wit < 0)
     {
-        this -> LastOperStatus = NO_ANOUGH_FUNDS;
+        //no action
     }
     else 
     {
-        this -> BalanceOld = this -> Balance;
         this -> Balance -= wit;
-        this -> LastOperStatus = OPERATION_OK;
     }
 }

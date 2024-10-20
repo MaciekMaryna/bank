@@ -18,6 +18,7 @@ class CheckingAccount : public Account
     private:
     protected:
     public:
+        CheckingAccount();
         void PayOverdraftInterest(void);    
         void Withdraw(const double) override;      
 };

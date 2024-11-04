@@ -64,3 +64,17 @@
     Zadania ze spotkania 18.10.2024:
         + Dokończyć konfiurację build systemu cmake
         + Kontynuować zadania z poprzedniego tygodnia
+
+    Pytania i wnioski:
+        + kilka metod ma "no action" po zlikwidowaniu statustu operacji. Nie mam tego jeszcze obmyślonego
+    
+    Zadania ze spotkania 25.10.2024:
+        - zwracanie statusu metod 
+        - wirtualizm - gdzie jeszcze można zastosować lub wymyśleć coś nowego
+        - koncepcja upływu czasu !!!
+        - chrono z biblioteki std postudiować
+        - moduł TestApp przerobić na namespace
+
+    Pytania i wnioski:
+        - OperationNumber z modułu TestApp jest zmienną globalną dla tego modułu. To nietypowa sytuacja dla podejścia obiektowego. 
+        W C zostawił bym ją w pliku kodu źródłowego, ale w C++, ze względu na namespace lepiej to chyba przenieśc do pliku *.h

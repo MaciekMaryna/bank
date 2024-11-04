@@ -11,6 +11,7 @@
 #include <iostream>
 #include <iomanip>
 #include <chrono>
+#include <thread>
 
 /******************************************************************************
  * Project specific includes
@@ -25,6 +26,10 @@
  * Global variables
  ******************************************************************************/
 std::string DomesticCurrency = "PLN";
+uint32_t CurrentTime = 0;
+uint32_t GrainOfTime = 1;
+uint32_t EndTime = 30;
+
 
 /******************************************************************************
  * Classes
@@ -44,8 +49,6 @@ std::ostream & operator<<(std::ostream & console, const Account &obj)
 *******************************************************************************/
 int main()
 {
-
-    TestApp_Run();
-
+    TestApp::TestApp_main();
     return 0;
 }

@@ -6,11 +6,20 @@
  ******************************************************************************/
 #include "Account.hpp"
 
-uint64_t Account::NumberOfInctances = 1; //static member of class need to have initialisation out of the class
+namespace TestApp  /* BEGIN: namespace TestApp */
+{
 
-void TestApp_ShowSeparationLine(void);
-void TestApp_ShowColumnNames(void);
-void TestApp_ShowLastOperationReport(Account* Tab);
-void TestApp_Run(void);
+void ShowSeparationLine(void);
+void ShowColumnNames(void);
+void ShowReport(Account* Tab);
+void SetCursorPosition(int, int);
+void ClearConsole();
+void HideCursor(void);
+void ShowCursor(void);
+int AsciiIfKeyPressed(void);
+void TestApp_main(void);
+void Run(void);
 
 #endif /* #ifndef TESTAPP_H */
+
+} /* END: namespace TestApp */

@@ -19,8 +19,10 @@ class CheckingAccount : public Account
     protected:
     public:
         CheckingAccount();
-        void PayOverdraftInterest(void);    
-        void Withdraw(const double) override;      
+        void PayOverdraftInterest(void); 
+        void Deposit(const double) override;   
+        Status_t Withdraw(const double) override; 
+        Status_t Capitalise(void) override;
 };
 
 #endif /* #ifndef CHECKINGACCOUNT_H */

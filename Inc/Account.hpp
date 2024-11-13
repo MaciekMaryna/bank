@@ -10,8 +10,6 @@
 /******************************************************************************
  * Typedefs
  ******************************************************************************/
-/* 
-    keep for the future
 
 enum Status_t
 {
@@ -23,10 +21,12 @@ enum Status_t
     CANNOT_SET_SUCH_BALANCE,
     INVALID_CURRENCY_NAME,
     INVALID_IBAN_NUMBER,
+    CAPITALIZATION_NOT_AVAILABLE,
 
     NUMBER_OF_STATUSES
 };
 
+/*
 std::string ErrorNames[] =
 {
     "OPERATION_OK",
@@ -57,8 +57,10 @@ class Account
         double Get_Balance(void);        
         std::string Get_Currency(void);
         void Set_Currency(std::string);        
-        void Deposit(const double);        
-        virtual void Withdraw(const double) = 0;         
+        virtual void Deposit(const double) = 0;        
+        virtual Status_t Withdraw(const double) = 0;  /*std::cout << __PRETTY_FUNCTION__ << std::endl; //verry useful macro*/
+        virtual Status_t Capitalise(void) = 0;
+        
         void operator+=(const double);
         void operator-=(const double);
         friend std::ostream & operator<<(std::ostream &, const Account &); 

@@ -104,11 +104,12 @@ int TestApp::AsciiIfKeyPressed(void)
 void TestApp::TestApp_main(void)
 {
     auto StartTimeStamp = std::chrono::high_resolution_clock::now();
-    TestApp::Run();
+    //TestApp::Run();
     auto CurrentTimeStamp = std::chrono::high_resolution_clock::now();
     auto Duration = 0;    
     HideCursor();
-    ClearConsole();    
+    ClearConsole();   
+    Run(); 
 
     bool  DoNotFinish = true;
 
@@ -153,7 +154,9 @@ void TestApp::Run(void)
     // accounts.insert (&MyAccount4);
     
     Account* MyTab[] = {&MyAccount1, &MyAccount2, &MyAccount3, &MyAccount4};
-
+    MyAccount1.Withdraw(0);
+    MyTab[0] -> Withdraw(0);
+    return;
     for (int i = 0; i < sizeof(MyTab)/sizeof(MyTab[0]); i++)
     {
         MyTab[i] -> Set_Currency("PL");

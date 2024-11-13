@@ -14,8 +14,9 @@ class  PersonalAccount : public Account
         float OverdraftInterestRate;
         double OverdraftLimit;
     public:
-        void PayOverdraftInterest(void);
-        void Withdraw(const double);
+        void Deposit(const double) override; 
+        Status_t Withdraw(const double) override;
+        Status_t Capitalise(void) override;
         void Set_OverdraftInterestRate(const double);
         double Get_OverdraftInterestRate(void);
         void Set_OverdraftLimit(const double);

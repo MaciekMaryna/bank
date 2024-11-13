@@ -13,7 +13,9 @@ class ForeginCurrencyAccount : public Account
     private:
     protected:
     public:
-        void Withdraw(const double) override;               
+        void Deposit(const double) override; 
+        Status_t Withdraw(const double) override;
+        Status_t Capitalise(void) override;               
 };
 
 #endif /* #ifndef FOREGINCURRENCYACCOUNT_H */

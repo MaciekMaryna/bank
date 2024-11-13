@@ -15,8 +15,9 @@ class SavingsAccount : public Account
     protected:
     public:
         float InterestRate;
-        void CapitaliseIterest(void);
-        void Withdraw(const double) override;           
+        void Deposit(const double) override; 
+        Status_t Withdraw(const double) override;           
+        Status_t Capitalise(void);        
 };
 
 #endif /* #ifndef SAVINGSACCOUNT_H */

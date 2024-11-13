@@ -7,25 +7,35 @@
 #include "PersonalAccount.hpp"
 
 /*********** Class PersonalAccount (debit) ************/
-void PersonalAccount::PayOverdraftInterest(void)
+void PersonalAccount::Deposit(const double dep)
 {
-    if (this->Balance < 0)
-    {
-        this -> Balance *= (1 + this->OverdraftInterestRate);
-    }
+    this -> Balance += dep;
 }
 
-void PersonalAccount::Withdraw(const double wit)
+Status_t PersonalAccount::Withdraw(const double wit)
 {
+    Status_t RetStatus = OPERATION_OK;
     if(Balance - wit < (-OverdraftLimit))
     {
-        //no action
+        RetStatus = NO_ANOUGH_FUNDS;
     }
     else 
     {
         this -> Balance -= wit;
+        RetStatus = OPERATION_OK;
     }
+    return RetStatus;
 } 
+
+Status_t PersonalAccount::Capitalise(void)
+{
+    Status_t RetStatus = OPERATION_OK;
+    if (this->Balance < 0)
+    {
+        this -> Balance *= (1 + this->OverdraftInterestRate);
+    }
+    return RetStatus;
+}
 
 void PersonalAccount::Set_OverdraftInterestRate(const double rat)
 {
